@@ -13,7 +13,7 @@ const Header = ({ theme }) => {
       <header className={`header-container ${isDark ? 'dark' : ''}`}>
         <div className='header-content'>
           <h2 className='title'>
-            <a href='/'>World Culture!!!</a>
+            <a href='/'>World Cultures</a>
           </h2>
           <p className='theme-changer' onClick={() => handleTheme()}>
             <i className={`fa-solid fa-${isDark ? 'sun' : 'moon'}`}></i>
