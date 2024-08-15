@@ -1,0 +1,600 @@
+====================================================================
+What is React Element? | The Complete React Course | Ep.03
+
+react.createElement creates object(react element)
+
+
+create element using vanilla js:
+//using vanilla js
+// const root = document.querySelector('#root')
+// const container = document.createElement('div')
+// container.classList.add('container')
+// container.innerHTML = 'its a react container'
+
+// console.log(root)
+// root.appendChild(container)
+---------------------------------------------
+
+create element using React:
+
+const container = React.createElement(
+  'div',
+  { className: 'container', key: 1 },
+  [
+    React.createElement('div', { className: 'para', key: 2 }, [
+      React.createElement('p', { className: 'heading', key: 3 }, [
+        React.createElement('img', {
+          src: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+          key: 4,
+        }),
+      ]),
+    ]),
+  ]
+)
+const root = ReactDOM.createRoot(document.querySelector('#root'))
+root.render(container)
+
+====================================================================
+
+What is JSX? | Transform JSX with Babel | The Complete React Course | Ep.04
+
+react will not show "undefined" on the page
+css will be added in 2 brackets:
+1st is to inform its javascript
+2nd to give css in obj format
+
+<img
+        src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+        style={{
+          width: 200,
+          backgroundColor: 'teal',
+          borderRadius: 8,
+          padding: 16,
+        }}
+      />
+
+
+      ------------------------------------------
+      react babel installation:
+
+       "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel ./script.js -d lib"
+  },
+
+  ------------------------------------------
+
+  How Source Maps Can Save You Time in React Development | The Complete React Course | Ep.05
+
+lib contains output js files that will be shown on the browser
+
+npm init -y => create new package.json file
+
+source map: 2 ways to generate sourceMaps:
+package.json:
+
+
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel ./script.js -d lib --source-maps"
+  },
+
+npm run build
+
+check lib>script.js.map
+
+----
+2nd way:
+babel.rc
+{
+    "presets": ["@babel/preset-react"],
+    "sourceMaps": true
+  }
+------------------------------------------
+  Why Should You Learn React With Parcel? | The Complete React Course | Ep.07
+
+react installation:
+npm i react react-dom
+
+
+installing Parcel:
+create from scrach:
+create react folder
+index.html, script.js
+package.json => npm i react react-dom
+
+install parcel:
+npm install --save-dev parcel
+
+
+npx parcel index.html  => npx is used for execution of npm => creates new server
+it will create dist folder with parcel compiled files=> new index.html js and map files
+
+------------------------------------------
+
+uninstall react if:
+npm un react react-dom
+
+------------------------------------------
+Hot reloading
+When you make a change, Parcel automatically updates your code in the browser – no page reload necessary!
+------------------------------------------
+Tree shaking
+
+It statically analyzes the imports and exports of each module, and removes everything that isn't used.
+
+Tree shaking even works across dynamic import() boundaries, shared bundles, and even across languages! If you use CSS modules, unused classes will be removed automatically.
+------------------------------------------
+Minification
+Parcel includes minifiers for JavaScript, CSS, HTML, and SVG out of the box! Just run parcel build index.html, and your whole application will be built and optimized automatically.
+
+------------------------------------------
+
+run the parcel in terminal:
+npx parcel index.html
+
+for minified files:
+npx parcel build index.html
+------------------------------------------
+
+component: 
+its a function which is returning some jsx code
+reusable piece of code, we can use it wherever we want, you just need to import it.
+
+------------------------------------------
+
+functional component:
+arrow function:
+we cannot write => export default const App =() => {} // not possible
+
+instead write:
+const App =() => {}
+
+export default App;
+------------------------------------------
+simple reactjs project using parcel:
+
+npm init -y =>(-y will not ask any questions, it will install npm directly) package.json will be created
+
+npm i -D parcel => (-D will be installed as Dev dependency)
+
+npm i react react-dom
+
+==========
+files: create index.html, index.js, css file and link it
+
+index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parcel</title>
+    <script src="index.js" type="module"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+------------------------------------------------
+index.js
+
+import { createRoot } from 'react-dom/client'
+import './style.css'
+import App from './App'
+
+const root = createRoot(document.getElementById('root'))
+
+root.render(
+  <>
+    <App />
+  </>
+)
+------------------------------------------------
+App.js
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const App = () => {
+  return (
+    <div>
+      <p>Hello App</p>
+    </div>
+  )
+}
+
+export default App
+
+
+-----
+run command => npm start
+
+--------------------------------------------------------------------------------
+tooltip:
+
+Button.js
+
+import React from 'react'
+
+const Button = ({ imageUrl, buttonName }) => {
+  return (
+    <div>
+      <button title={buttonName}>
+        <img src={imageUrl} alt={buttonName} />
+      </button>
+    </div>
+  )
+}
+
+export default Button
+
+-------
+AppleCounter.js
+
+import React from 'react'
+import Button from './Button'
+import LeftArrow from '../assets/images/left-arrow.png'
+import RightArrow from '../assets/images/right-arrow.png'
+import AppleBasket from './AppleBasket'
+import './AppleCounter.css'
+const AppleCounter = () => {
+  return (
+    <section>
+      <AppleBasket appleCount={10} basketName='Basket 1' />
+      <Button buttonName='left arrow' imageUrl={LeftArrow} />
+      <Button buttonName='right arrow' imageUrl={RightArrow} />
+      <AppleBasket appleCount={0} basketName='Basket 2' />
+    </section>
+  )
+}
+
+export default AppleCounter
+=======================================================================================
+
+inside component we cannot pass event handlers for that we need to pass it as an prop:
+
+AppleCounter.js
+
+<Button
+        clickHandler={() => console.log('left arrow clicked')}
+        buttonName='left arrow'
+        imageUrl={LeftArrow}
+      />
+      <Button
+        clickHandler={() => console.log('right arrow clicked')}
+        buttonName='right arrow'
+        imageUrl={RightArrow}
+      />
+
+
+Button.js
+
+<button title={buttonName} onClick={clickHandler}>
+        <img src={imageUrl} alt={buttonName} />
+      </button>
+
+      =======================================================================================
+
+      React fragment will not create any extra element or div,
+      it will only work as a parent div, as a wrapper to all the elements which are inside it
+=======================================================================================
+
+      What is Children Prop in React? | The Complete React Course | Ep.16
+
+the children prop allows you to pass child elements directly into a component. It is used for:
+
+1) Component Composition: Simplifies nesting components within each other.
+2) Reusability: Enables the creation of reusable components that accept arbitrary content.
+3) Layouts and Wrappers: Useful for creating components that wrap other elements.
+
+You can access the children prop inside a component by using destructuring. children can be any valid React node, and you can conditionally render children based on logic.
+
+=======
+
+<Component>
+hi
+</Component>
+
+we can access the hi with props.children
+
+===========
+example:
+2 ways:
+
+<Button
+        clickHandler={leftClickHandler}
+        // buttonName='left arrow'
+        imageUrl={LeftArrow}
+      >
+        left arrow //as a html code inside component
+      </Button>
+      <Button
+        clickHandler={rightClickHandler}
+        children='right arrow' // as a prop to component
+        imageUrl={RightArrow}
+      ></Button>
+
+
+and use it like children prop to the child component:
+
+import React from 'react'
+
+const Button = ({ imageUrl, buttonName, clickHandler, children }) => {
+  return (
+    <div>
+      <button title={children} onClick={clickHandler}>
+        {children}
+        <img src={imageUrl} alt={children} />
+      </button>
+    </div>
+  )
+}
+
+export default Button
+
+==============================
+example 2 : passing AppleCounter component as a child to counter component:
+
+App.js
+
+const App = () => {
+  return (
+    <div>
+      <Counter>
+        <AppleCounter />
+      </Counter>
+    </div>
+  )
+}
+
+Counter.js
+
+const Counter = ({ children }) => {
+  const [count, setCount] = useState(0)
+
+  const handleCounter = () => {
+    setCount(count + 1)
+  }
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={handleCounter}>Increment</button>
+      {children}
+    </div>
+  )
+}
+
+
+===========================================================================================
+
+How to Scope CSS to a Component in React? | CSS Modules in React | The Complete React Course | Ep.18
+
+css modules is used for scoped css for that perticular component
+
+Counter.module.css => applied to the counter component only
+
+import styles from './Counter.module.css'
+===========================================================================================
+
+    <script src="index.js" type="module"></script>
+ 
+ type="module" => so that we can import export that file
+
+ ===========================================================================================
+
+ setState is used inside useEffect(), so that we can rerender the page at once
+
+ if we use fetch method directly without useEffect, then it will rerender the page again and again
+ everytime it gets updated
+
+ =======================================================
+2 useEffect at a time:
+
+useState => used to create states
+useEffect => used to monitor (to check the updates) , if we wants to track any state of a variable
+
+   useEffect(()=>{
+      fetch('https://restcountries.com/v3.1/all')
+  .then((res) => res.json())
+  .then((data) => {
+    setCountriesData(data)
+    console.log("hiee");
+
+  })
+
+    },[count]) // dependency array (default 1st time runs always)
+
+    useEffect(()=>{
+      console.log("hi");
+
+    },[count, countriesData]) // we can add multiple states here (runs first time always)
+
+    output:
+    hi => when page loads countriesData for the first time
+    hiee => page loads
+    hi => after setCountriesData updates the values and again prints "hi"
+
+=======================================================
+unmounting: when a component is unmounting, when it is getting removed from the page
+
+     useEffect(()=>{
+      console.log("hi");
+      return () => {
+        console.log('unmounting ..cleaning Up');
+      }
+    },[count])
+
+    =======================================================
+
+    if we write 'unmount' inside inpput, then setInterval time stops:
+
+
+    useEffect(()=>{
+      fetch('https://restcountries.com/v3.1/all')
+  .then((res) => res.json())
+  .then((data) => {
+    setCountriesData(data)
+    console.log("hiee");
+
+  })
+    const setIntervalId = setInterval(()=>{
+      console.log('running...');
+    },[1000])
+    console.log(setIntervalId);
+
+    return () => {
+      console.log('unmounting ..cleaning Up');
+      clearInterval(setIntervalId)
+    }
+    },[count])
+
+    App.js
+    return <div>
+    <Header />
+    <main>
+    <div className="search-filter-container">
+    <SearchBar setQuery={setQuery}/>
+    <SelectMenu/>
+
+    </div>{
+      query === 'unmount' ? '' :<CountriesContainer query={query} />
+    }
+    
+    </main>
+
+    =======================================================
+    routing we use different library of react: react-router-dom
+
+    npm i react-router-dom
+
+    =======================================================
+    Outlet:
+    What is React Outlet? React Outlet is a component provided by React Router that serves as a placeholder for child routes within a parent route. It allows for the nesting of routes, enabling developers to create complex navigation structures in their applications.
+
+    index.jsx
+
+    const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/contact',
+        element: <Contact />,
+      },
+    ],
+  },
+])
+
+
+App.jsx
+
+const App = () => {
+  return (
+    <div>
+      <Header />
+      <Outlet />
+    </div>
+  )
+}
+
+after using Outlet, it will automatically render the pages which has path given inside that children router
+================================================================= 
+
+Error Page:
+any random page: this page content will be shown:
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
+
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/contact',
+        element: <Contact />,
+      },
+    ],
+  },
+])
+
+===========================================================================
+do not want to load a page=> use <link> instead of anchor tag <a>
+===========================================================================
+Dynamic Routing in React | The Complete React Course | Ep.23
+
+useParams() : its a hook, it give access to the page route.
+if we wants to access the page URL, we can use it
+
+if we wants to check any random page, it will go to contact, if "/:contact" is added
+{
+        path: '/:contact',
+        element: <Contact />,
+      },
+
+===========================================================================
+how to create contextAPI:
+
+contexts/ThemeContext.jsx
+
+import { createContext } from 'react'
+
+export const themeContext = createContext('sonal')
+
+home.jsx
+import React, { useContext } from 'react'
+
+  const theme = useContext(themeContext)
+  console.log(theme)
+
+we can override the value of createContext using provider:
+App.jsx
+
+return (
+    <themeContext.Provider value={[isDark, setIsDark]}> //it will replace 'sonal' by "[isDark, setIsDark]"
+      <Header  />
+      <Outlet />
+    </themeContext.Provider>
+  )
+
+now we can use custom context anywhere inside header and Outlet:
+
+Header.jsx
+  const [isDark, setIsDark] = useContext(themeContext)
+
+
+===========================================================================
+netlify:
+
+its a tool/platform used to deploy our code
+
+to deploy our code we need to use build command so that it will create minified version of html/css/js files
+=> npm run build
+
+package.json:
+remove   "main": "index.js",
+
+and add:
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+
+  },
+
+  it will create double double files of css and js
+  remove the dist folder and again run => npm run build
+
+  it will create source map files of css and js => used for debugging
